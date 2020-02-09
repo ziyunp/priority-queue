@@ -93,7 +93,10 @@ public class Particle {
     double rootDet = Math.sqrt(det);
     double t = (b * (-1) - rootDet) / (2 * a);
     if (t > 0) {
-      return new TwoParticleCollision(p1, p2, now + t);
+      Particle[] ps = new Particle[2];
+      ps[0] = p1;
+      ps[1] = p2;
+      return new TwoParticleCollision(now + t, ps);
     }
     return null;
   }
@@ -125,7 +128,9 @@ public class Particle {
     }
 
     if (t > 0) {
-      c = new ParticleWallCollision(p, w, now + t);
+      Particle[] ps = new Particle[1];
+      ps[0] = p;
+      c = new ParticleWallCollision(now + t, ps, w);
     }
 
     return c;

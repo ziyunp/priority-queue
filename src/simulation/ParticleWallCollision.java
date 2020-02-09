@@ -17,11 +17,10 @@ public class ParticleWallCollision extends Collision {
 
   @Override
   public void happen(ParticleEventHandler h) {
-//    should there be more than one?
-    for(int i = 0; i < getParticles().length; i++) {
-      Particle particle = getParticles()[i];
-      particle.collide(particle, wall);
-    }
+
+    Particle particle = getParticles()[0];
+    particle.collide(particle, wall);
+
     h.reactTo(this);
   }
 }

@@ -8,11 +8,11 @@ public abstract class Collision extends AbstractEvent {
   /**
    * Constructor for Collision
    */
-  public Collision(double t, Particle[] ps, Particle[] particles) {
+  public Collision(double t, Particle[] ps) {
     super(t);
-    this.particles = particles;
-    for (int i = 0; i < particles.length; i++) {
-      particleHits += particles[i].collisions();
+    this.particles = ps;
+    for (int i = 0; i < ps.length; i++) {
+      particleHits += ps[i].collisions();
     }
   }
 

@@ -2,11 +2,18 @@ package simulation;
 
 public abstract class Collision extends AbstractEvent {
 
+  private final Particle[] particles;
+  int particleHits;
+
   /**
    * Constructor for Collision
    */
-  public Collision(double t, Particle[] ps) {
-    // TODO implement constructor
+  public Collision(double t, Particle[] ps, Particle[] particles) {
+    super(t);
+    this.particles = particles;
+    for (int i = 0; i < particles.length; i++) {
+      particleHits += particles[i].collisions();
+    }
   }
 
   /**
@@ -14,15 +21,17 @@ public abstract class Collision extends AbstractEvent {
    */
   @Override
   public boolean isValid() {
-    // TODO implement his method
-    return false;
+    int curHits = 0;
+    for (int i = 0; i < particles.length; i++) {
+      curHits += particles[i].collisions();
+    }
+    return curHits == particleHits;
   }
 
   /**
    * Returns an array containing the Particles involved in this Collision.
    */
   public Particle[] getParticles() {
-    // TODO implement this method
-    return null;
+    return particles;
   }
 }

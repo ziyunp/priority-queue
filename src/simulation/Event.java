@@ -1,12 +1,12 @@
 package simulation;
 
-public interface Event extends Comparable<Event>{
+public interface Event extends Comparable<Event> {
 
-    public double time();
+  public double time();
 
-    public void happen(ParticleEventHandler h);
+  public void happen(ParticleEventHandler h);
 
-    public boolean isValid();
+  public boolean isValid();
 
 }
 

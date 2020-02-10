@@ -8,14 +8,18 @@ public class ParticleSimulation implements Runnable, ParticleEventHandler{
 
     private static final long FRAME_INTERVAL_MILLIS = 40;
     
-    private final ParticlesModel          model;
-    private final ParticlesView           screen;
-    
+    private final ParticlesModel model;
+    private final ParticlesView screen;
+    private MinPriorityQueue<Event> eventQueue;
+    private double clock;
     /**
      * Constructor.
      */
     public ParticleSimulation(String name, ParticlesModel m) {
-        // TODO implement constructor
+        model = m;
+        screen = new ParticlesView(name, m);
+        eventQueue = new MinPriorityQueue<Event>();
+        eventQueue.add(new Tick(1));
     }
 
     /**
@@ -31,7 +35,32 @@ public class ParticleSimulation implements Runnable, ParticleEventHandler{
             e.printStackTrace();
         }
         
-        // TODO complete implementing this method
+        while(eventQueue.size() > 0) {
+            Event e = eventQueue.remove();
+            double timeElapsed = e.time() - clock;
+            clock = e.time();
+            model.moveParticles(timeElapsed);
+            try {
+                e.happen(this);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
+    @Override
+    public void reactTo(Tick tick) {
+        try {
+            Thread.sleep(FRAME_INTERVAL_MILLIS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        screen.update();
+        eventQueue.add(tick);
+    }
+
+    @Override
+    public void reactTo(Collision c) {
+        eventQueue.add(c);
+    }
 }

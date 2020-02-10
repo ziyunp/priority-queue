@@ -2,11 +2,12 @@ package simulation;
 
 public abstract class AbstractEvent implements Event {
 
+    private double time;
     /**
      * Constructor for AbstractEvent.
      */
     public AbstractEvent(double time) {
-        // TODO implement the constructor 
+        this.time = time;
     }
 
     /**
@@ -14,8 +15,7 @@ public abstract class AbstractEvent implements Event {
      */
     @Override
     public double time() {
-        // TODO implement this method
-        return 0;
+        return time;
     }
 
     /**
@@ -23,8 +23,11 @@ public abstract class AbstractEvent implements Event {
      */
     @Override
     public int compareTo(Event that) {
-        // TODO implement this method
+        if (time < that.time()) {
+            return -1;
+        } else if (time > that.time()) {
+            return 1;
+        }
         return 0;
     }
-
 }

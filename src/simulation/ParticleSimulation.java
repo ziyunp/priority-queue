@@ -22,6 +22,10 @@ public class ParticleSimulation implements Runnable, ParticleEventHandler {
     screen = new ParticlesView(name, m);
     queue = new MinPriorityQueue<>();
     queue.add(new Tick(1));
+    Iterable<Collision> newCollisions = model.predictAllCollisions(clock);
+    for (Collision col: newCollisions) {
+      queue.add(col);
+    }
   }
 
   /**
@@ -37,12 +41,17 @@ public class ParticleSimulation implements Runnable, ParticleEventHandler {
       e.printStackTrace();
     }
 
-    Event next = queue.remove();
-    if (next.isValid()) {
-      double dt = next.time() - clock;
-      clock = next.time();
-      model.moveParticles(dt);
-      next.happen(this);
+    Event next = null;
+    while(true) {
+      next = queue.remove();
+      if (next.isValid()) {
+        double dt = next.time() - clock;
+        clock = next.time();
+        model.moveParticles(dt);
+        next.happen(this);
+      } else {
+//        System.out.println(clock);
+      }
     }
   }
 
@@ -52,18 +61,31 @@ public class ParticleSimulation implements Runnable, ParticleEventHandler {
     try {
       Thread.sleep(FRAME_INTERVAL_MILLIS);
     } catch (InterruptedException e) {
+//      System.out.println("kok");
       return;
     }
+//    System.out.println("ok");
     screen.update();
-    double nextTick = Math.ceil(clock);
+    double nextTick = Math.floor(1 + clock);
     queue.add(new Tick(nextTick));
   }
 
   @Override
   public void reactTo(Collision c) {
+//    System.out.println("col ok");
+    screen.update();
+
     Iterable<Collision> newCollisions = model.predictAllCollisions(clock);
     for (Collision col: newCollisions) {
       queue.add(col);
     }
+
+//    Particle[] ps = c.getParticles();
+//    for (Particle p: ps) {
+//      Iterable<Collision> newCollisions = model.predictCollisions(p, clock);
+//      for (Collision col : newCollisions) {
+//        queue.add(col);
+//      }
+//    }
   }
 }

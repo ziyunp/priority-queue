@@ -31,8 +31,8 @@ public abstract class Collision extends AbstractEvent{
 
     private int getParticleHits() {
         int hits = 0;
-        for (int i = 0; i < particles.length; i++) {
-            hits += particles[i].collisions();
+        for (Particle p : particles) {
+            hits += p.collisions();
         }
         return hits;
     }

@@ -40,11 +40,7 @@ public class ParticleSimulation implements Runnable, ParticleEventHandler{
             double timeElapsed = e.time() - clock;
             clock = e.time();
             model.moveParticles(timeElapsed);
-            try {
-                e.happen(this);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
+            e.happen(this);
         }
     }
 

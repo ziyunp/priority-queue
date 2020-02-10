@@ -75,17 +75,17 @@ public class ParticleSimulation implements Runnable, ParticleEventHandler {
 //    System.out.println("col ok");
     screen.update();
 
-    Iterable<Collision> newCollisions = model.predictAllCollisions(clock);
-    for (Collision col: newCollisions) {
-      queue.add(col);
-    }
-
-//    Particle[] ps = c.getParticles();
-//    for (Particle p: ps) {
-//      Iterable<Collision> newCollisions = model.predictCollisions(p, clock);
-//      for (Collision col : newCollisions) {
-//        queue.add(col);
-//      }
+//    Iterable<Collision> newCollisions = model.predictAllCollisions(clock);
+//    for (Collision col: newCollisions) {
+//      queue.add(col);
 //    }
+
+    Particle[] ps = c.getParticles();
+    for (Particle p: ps) {
+      Iterable<Collision> newCollisions = model.predictCollisions(p, clock);
+      for (Collision col : newCollisions) {
+        queue.add(col);
+      }
+    }
   }
 }

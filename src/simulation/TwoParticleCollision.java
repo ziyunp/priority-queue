@@ -4,12 +4,9 @@ public class TwoParticleCollision extends Collision {
 
   /**
    * Constructor for Collision
-   *
-   * @param t
-   * @param ps
    */
-  public TwoParticleCollision(double t, Particle[] ps) {
-    super(t, ps);
+  public TwoParticleCollision(Particle p1, Particle p2, double t) {
+    super(t, new Particle[]{p1, p2});
   }
 
   @Override

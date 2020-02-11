@@ -67,7 +67,7 @@ public class MinPriorityQueue<T extends Comparable<T>> {
             T leftChild = queue.get(leftChildIndex);
             T rightChild = queue.get(rightChildIndex);
             // compare with children and swap if child < lastElem
-            if (leftChild.compareTo(lastElem) < 0) {
+            if (leftChild.compareTo(rightChild) < 0 && leftChild.compareTo(lastElem) < 0) {
                 swap(curIndex, leftChildIndex);
                 curIndex = leftChildIndex;
             } else if (rightChild.compareTo(lastElem) < 0) {

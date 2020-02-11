@@ -22,6 +22,7 @@ public class ParticleSimulation implements Runnable, ParticleEventHandler{
         screen = new ParticlesView(name, m);
         eventQueue = new MinPriorityQueue<>();
         eventQueue.add(new Tick(1));
+        m.predictAllCollisions(clock).forEach(collision -> eventQueue.add(collision));
     }
 
     /**
@@ -39,10 +40,12 @@ public class ParticleSimulation implements Runnable, ParticleEventHandler{
 
         while(eventQueue.size() > 0) {
             Event e = eventQueue.remove();
-            double timeElapsed = e.time() - clock;
-            clock = e.time();
-            model.moveParticles(timeElapsed);
-            e.happen(this);
+            if (e.isValid()) {
+                double timeElapsed = e.time() - clock;
+                clock = e.time();
+                model.moveParticles(timeElapsed);
+                e.happen(this);
+            }
         }
     }
 
@@ -65,9 +68,4 @@ public class ParticleSimulation implements Runnable, ParticleEventHandler{
             model.predictCollisions(p, clock).forEach(collision -> eventQueue.add(collision));
         }
     }
-
-//    private void updateClock(double time) {
-//        clock = time;
-//        model.predictAllCollisions(clock).forEach(collision -> eventQueue.add(collision));
-//    }
 }

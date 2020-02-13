@@ -14,23 +14,16 @@ public class ParticleSimulation implements Runnable, ParticleEventHandler {
   private MinPriorityQueue<Event> queue;
   private double clock = 0;
 
-  /**
-   * Constructor.
-   */
+  /** Constructor. */
   public ParticleSimulation(String name, ParticlesModel m) {
     model = m;
     screen = new ParticlesView(name, m);
     queue = new MinPriorityQueue<>();
     queue.add(new Tick(1));
-    Iterable<Collision> newCollisions = model.predictAllCollisions(clock);
-    for (Collision col: newCollisions) {
-      queue.add(col);
-    }
+    m.predictAllCollisions(clock).forEach(collision -> queue.add(collision));
   }
 
-  /**
-   * Runs the simulation.
-   */
+  /** Runs the simulation. */
   @Override
   public void run() {
     try {
@@ -41,30 +34,25 @@ public class ParticleSimulation implements Runnable, ParticleEventHandler {
       e.printStackTrace();
     }
 
-    Event next = null;
-    while(true) {
-      next = queue.remove();
-      if (next.isValid()) {
-        double dt = next.time() - clock;
-        clock = next.time();
+    while (queue.size() > 0) {
+      Event e = queue.remove();
+      if (e.isValid()) {
+        double dt = e.time() - clock;
+        clock = e.time();
         model.moveParticles(dt);
-        next.happen(this);
-      } else {
-//        System.out.println(clock);
+        e.happen(this);
       }
     }
   }
-
 
   @Override
   public void reactTo(Tick tick) {
     try {
       Thread.sleep(FRAME_INTERVAL_MILLIS);
     } catch (InterruptedException e) {
-//      System.out.println("kok");
+      e.printStackTrace();
       return;
     }
-//    System.out.println("ok");
     screen.update();
     double nextTick = Math.floor(1 + clock);
     queue.add(new Tick(nextTick));
@@ -72,20 +60,10 @@ public class ParticleSimulation implements Runnable, ParticleEventHandler {
 
   @Override
   public void reactTo(Collision c) {
-//    System.out.println("col ok");
     screen.update();
-
-//    Iterable<Collision> newCollisions = model.predictAllCollisions(clock);
-//    for (Collision col: newCollisions) {
-//      queue.add(col);
-//    }
-
     Particle[] ps = c.getParticles();
-    for (Particle p: ps) {
-      Iterable<Collision> newCollisions = model.predictCollisions(p, clock);
-      for (Collision col : newCollisions) {
-        queue.add(col);
-      }
+    for (Particle p : ps) {
+      model.predictCollisions(p, clock).forEach(collision -> queue.add(collision));
     }
   }
 }

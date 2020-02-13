@@ -34,8 +34,9 @@ public class ParticleSimulation implements Runnable, ParticleEventHandler {
       e.printStackTrace();
     }
 
+    Event e;
     while (queue.size() > 0) {
-      Event e = queue.remove();
+      e = queue.remove();
       if (e.isValid()) {
         double dt = e.time() - clock;
         clock = e.time();

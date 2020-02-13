@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class MinPriorityQueue<T extends Comparable<T>> {
 
   private ArrayList<T> queue;
-  private int rootLoc = 1;
+  private final int rootIndex = 1;
 
   /** Creates an empty queue. */
   public MinPriorityQueue() {
@@ -21,13 +21,13 @@ public class MinPriorityQueue<T extends Comparable<T>> {
   /** Adds elem to the queue. */
   public void add(T elem) {
     queue.add(elem);
-    int elemLoc = size();
-    int parentLoc = (elemLoc) / 2;
+    int elemIndex = size();
+    int parentIndex = (elemIndex) / 2;
 
-    while (parentLoc >= 1 && elem.compareTo(queue.get(parentLoc)) < 0) {
-      swap(parentLoc, elemLoc);
-      elemLoc = parentLoc;
-      parentLoc = (elemLoc) / 2;
+    while (parentIndex >= 1 && elem.compareTo(queue.get(parentIndex)) < 0) {
+      swap(parentIndex, elemIndex);
+      elemIndex = parentIndex;
+      parentIndex = (elemIndex) / 2;
     }
   }
 
@@ -36,11 +36,11 @@ public class MinPriorityQueue<T extends Comparable<T>> {
 
     if (isEmpty()) return null;
 
-    T elem = queue.get(rootLoc);
-    queue.set(rootLoc, queue.get(size()));
+    T elem = queue.get(rootIndex);
+    queue.set(rootIndex, queue.get(size()));
     queue.remove(size());
 
-    sort(rootLoc);
+    sort(rootIndex);
 
     return elem;
   }

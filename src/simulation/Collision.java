@@ -3,35 +3,28 @@ package simulation;
 public abstract class Collision extends AbstractEvent {
 
   private final Particle[] particles;
-  int particleHits;
+  private int particleHits;
 
-  /**
-   * Constructor for Collision
-   */
+  /** Constructor for Collision */
   public Collision(double t, Particle[] ps) {
     super(t);
-    this.particles = ps;
-    particleHits = 0;
-    for (int i = 0; i < ps.length; i++) {
-      particleHits += ps[i].collisions();
+    particles = ps;
+    for (Particle p : particles) {
+      particleHits += p.collisions();
     }
   }
 
-  /**
-   * Returns true if this Collision is (still) valid.
-   */
+  /** Returns true if this Collision is (still) valid. */
   @Override
   public boolean isValid() {
     int curHits = 0;
-    for (int i = 0; i < particles.length; i++) {
-      curHits += particles[i].collisions();
+    for (Particle p : particles) {
+      curHits += p.collisions();
     }
     return curHits == particleHits;
   }
 
-  /**
-   * Returns an array containing the Particles involved in this Collision.
-   */
+  /** Returns an array containing the Particles involved in this Collision. */
   public Particle[] getParticles() {
     return particles;
   }

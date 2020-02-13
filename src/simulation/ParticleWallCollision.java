@@ -4,12 +4,10 @@ public class ParticleWallCollision extends Collision {
 
   private final Wall wall;
 
-  /**
-   * Constructor for Collision
-   */
+  /** Constructor for Collision */
   public ParticleWallCollision(Particle p, Wall w, double t) {
-    super(t, new Particle[]{p});
-    this.wall = w;
+    super(t, new Particle[] {p});
+    wall = w;
   }
 
   @Override
